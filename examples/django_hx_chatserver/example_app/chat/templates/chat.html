@@ -1,4 +1,4 @@
-{% load staticfiles %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -100,15 +100,11 @@
 
 <script type="text/javascript">
 
-    {%
-        if address %}
+    {% if address %}
     SOCKET_ADDRESS = '{{address}}';
-    {% else %
-    }
+    {% else %}
     SOCKET_ADDRESS = null;
-    {%
-        endif %
-    }
+    {% endif %}
 
     var setup_chat = function (sock) {
 
