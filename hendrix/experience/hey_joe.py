@@ -3,6 +3,7 @@ import uuid
 from collections import defaultdict
 from itertools import chain
 
+from autobahn.exception import Disconnected
 from autobahn.twisted import WebSocketServerFactory
 from autobahn.twisted.websocket import WebSocketServerProtocol
 from twisted.internet import threads
@@ -22,9 +23,10 @@ class _ParticipantRegistry(object):
         self._participants_by_topic = defaultdict(set)
 
     def _send(self, payload, participant):
-        if participant.connected == 1:
+        # Wrap sendMessage in try/except block - participant may have become disconnected
+        try:
             return participant.sendMessage(json.dumps(payload).encode())
-        else:
+        except Disconnected:
             return None
 
     def _send_to_multiple_participants(self, payload, participants):
