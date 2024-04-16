@@ -22,7 +22,10 @@ class _ParticipantRegistry(object):
         self._participants_by_topic = defaultdict(set)
 
     def _send(self, payload, participant):
-        return participant.sendMessage(json.dumps(payload).encode())
+        if participant.connected == 1:
+            return participant.sendMessage(json.dumps(payload).encode())
+        else:
+            return None
 
     def _send_to_multiple_participants(self, payload, participants):
         # TODO: Optionally do this concurrently?
